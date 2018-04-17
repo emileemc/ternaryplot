@@ -1,0 +1,79 @@
+# ternaryplot
+
+
+drv <- dbDriver("PostgreSQL")
+con <- dbConnect(drv, host="dev1.c4esxwtwaw7y.us-east-1.redshift.amazonaws.com", port="5439",dbname="adpdsdev", user="reader", password="1Fjlf24Dqqqm")
+contacts <- dbGetQuery(con, "select * from social123.raw_contacts_2016_06 where current_company_name='ADP'")
+View(contacts)
+
+##clean__2016_10_18__contacts_2016_06__extra_variables_luke__v1
+ADPData <- contacts[grep("data", contacts$current_company_position, ignore.case = TRUE), ]
+View(ADPData)
+ADPData <- contacts[grep("Data", contacts$current_company_position), ]
+
+na.omit(ADPData$skills)
+ADPData2<-subset(ADPData, skills != "null")
+write.table(ADPData, "c:/Users/mcwillie/ADPData.csv", sep=",")
+
+
+library(tm)
+ADPSource2 <-VectorSource(ADPData2$skills)
+corpus <-Corpus(ADPSource2)
+review_corpus = tm_map(corpus, removeWords, c("the", "and", ""))
+review_corpus = tm_map(corpus, stripWhitespace)
+review_corpus = tm_map(corpus, PlainTextDocument)  
+dtm<-DocumentTermMatrix(corpus)
+
+#alternate way to dataframe, observations are repeated
+dtma<-tidy(dtm)
+View(dtma)
+bind_tf_idf(dtma, document, term, count)
+ADPTFIDF<-arrange(desc(ADPDataTFIDF))
+
+
+##resume here
+dtm = removeSparseTerms(dtm, 0.99)
+inspect(dtm[1,1:20])
+findFreqTerms(dtm, 1000)
+freq = data.frame(sort(colSums(as.matrix(dtm)), decreasing=TRUE))
+library(SnowballC)
+library(wordcloud)
+
+wordcloud(rownames(freq), freq[,1], max.words=50, colors=brewer.pal(1, "Dark2"))
+#tfidf begins
+review_dtm_tfidf <- DocumentTermMatrix(corpus, control = list(weighting = weightTfIdf))
+review_dtm_tfidf = removeSparseTerms(review_dtm_tfidf, 0.95)
+review_dtm_tfidf
+inspect(review_dtm_tfidf)
+
+
+sort(ADPDataTFIDF$tf_idf)decreasing=TRUE)
+
+ggplot(ADPDataT[1:20,], aes(term, tf_idf, fill=term)) +
+  geom_bar(stat = "identity") +
+  labs(x = NULL, y = "tf-idf") +
+  coord_flip()
+
+ADPDataT<-subset(ADPDataTFIDF, term == "sql" |term== "business" |term== "management" |term== "project"|term=="process"|term=="improvement")
+
+
+
+wordcloud(rownames(freq), colors=brewer.pal(8, "Accent"))
+
+library(broom)
+tidy(review_dtm_tfidf)
+
+library(wordcloud)
+
+words <- names(frequency)
+wordcloud(words[1:100], frequency[1:100])
+
+
+
+
+
+#another option
+library(qdap)
+#data source: ADPData$skills
+term_count<-freq_terms(ADPData$skills, 10)
+plot(term_count)
