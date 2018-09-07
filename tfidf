@@ -2,7 +2,7 @@
 
 
 drv <- dbDriver("PostgreSQL")
-con <- dbConnect(drv, host="dev1.c4esxwtwaw7y.us-east-1.redshift.amazonaws.com", port="5439",dbname="adpdsdev", user="reader", password="1Fjlf24Dqqqm")
+con <- dbConnect(drv, host="dev1.c4esxwtwaw7y.us-east-1.redshift.amazonaws.com", port="5439",dbname="adpdsdev", user="reader", password="#######")
 contacts <- dbGetQuery(con, "select * from social123.raw_contacts_2016_06 where current_company_name='ADP'")
 View(contacts)
 
