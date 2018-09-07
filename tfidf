@@ -48,12 +48,15 @@ inspect(review_dtm_tfidf)
 
 
 sort(ADPDataTFIDF$tf_idf)decreasing=TRUE)
+##to get top words 
 
 ggplot(ADPDataT[1:20,], aes(term, tf_idf, fill=term)) +
   geom_bar(stat = "identity") +
   labs(x = NULL, y = "tf-idf") +
   coord_flip()
-
+  
+  
+##subset for wordcloud
 ADPDataT<-subset(ADPDataTFIDF, term == "sql" |term== "business" |term== "management" |term== "project"|term=="process"|term=="improvement")
 
 
