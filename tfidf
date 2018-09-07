@@ -14,7 +14,7 @@ ADPData <- contacts[grep("Data", contacts$current_company_position), ]
 na.omit(ADPData$skills)
 ADPData2<-subset(ADPData, skills != "null")
 write.table(ADPData, "c:/Users/mcwillie/ADPData.csv", sep=",")
-
+## table example - vector - skills - listed "business, statistics, manager, sales" each observation
 
 library(tm)
 ADPSource2 <-VectorSource(ADPData2$skills)
